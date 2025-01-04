@@ -21,7 +21,13 @@ And with that third tab (Raw_3Attributes), may I present to you a spreadsheet ve
 
 You can see in column E I am using IF and =1 logic and there is no output if all conditionals are false, so the pivot table and charts won't represent the (FALSE) row.
 This is nice and easy and pretty and quick to put together, but if you have experience with MS Excel, you probably realized the pivot table and graph update as soon as the data updates.
-That means this is updating the products every time a cell is updated, which makes it processing-expensive - all of column E and the infographics are rerunning.
-We don't see how bad this could get because our data sets are small and we only have 3 attributes to categorize.
+That means this is updating the products every time a cell is updated, which makes it processing-expensive - all of column E and the infographics are rerunning each cell update.
+We don't see how bad this could get because these example data sets are small and we only have 3 attributes to categorize.
 
-This final detail brings me back to the one draw back of the optimized SQL process: 'tedious maintenance'.
+This final detail brings me back to the one con of the optimized SQL process: 'The syntax is tedious to expand.'
+"What would it look like if our data set is 126 times as big AND we are sorting by 10 attributes?"
+
+In the fourth tab, you'll see it results in more than 1000 Categories to logically path through (1024 to be exact).
+Coding the structure took days due to human error, which was unavoidable because even AI tools refused to produce >1000 lines of code.
+I can't say I blame them. It is tedious.
+Enjoy the slower updates.
