@@ -1,0 +1,46 @@
+Last week I mentioned output customers might want to make pretty infographics. Well Google Cloud Platform (GCP) likes data and can make pretty visuals that can be easily shared. What happens if we take our new CSVs (Silly and Original) and upload them in Google Sheets? We find out the CSVs technically have only 2 attributes: Keys and Values, which is not great for visuals because Values has multiple data points inside it (Attributes 1,2,3 and Category). After splitting the non-atomic Values and replacing all the parenthesis with nothing, we have successfully ETL'ed our data. The entire process takes less than 2 minutes, but I recall doing it the first time requiring a little meandering and an additional 15 minutes of learning where the buttons are. We can now make pretty Pivot Tables and Charts with our data!
+
+Minimize image
+Edit image
+Delete image
+
+
+
+
+Minimize image
+Edit image
+Delete image
+
+
+Which is great until you test updating the data points and realize Category (the one added by the Python processing) won't update in the pretty table nor the pivot table nor the column chart. That is because there is no relationship between Attributes 1, 2, 3, and Category. Such a thing only existed while processing the raw data, which is really unfortunate because that means our Category column, pivot tables, and charts will all be inaccurate if we manipulate any of the data points, even accidentally. I recommend testing this yourself by taking a copy of this gSheet and altering the data in the highlighted cells. Letters can change the order in the pivot table, but charts will completely remove a non-int attribute.
+
+Minimize image
+Edit image
+Delete image
+
+Reorder, yes, but incorrectly categorized.
+Maximize image
+Edit image
+Delete image
+
+Would you notice it in the middle of a presentation?
+This is so far from optimal; it is factually wrong. If there is an update in the attributes' data points, the category and infographics need to also update. But that means I have to create in gSheets a similar process to the Python processing. If I am going to do that, I might as well process the raw data in gSheets too and save myself pre-processing and ETL'ing work. I present to you in column E of '3Attributes' (the third tab) a spreadsheet version of, "How else can I mimic an optimized SQL process?"
+
+=IF(B2=1,IF(C2=1,IF(D2=1,7,6),IF(D2=1,5,1)),IF(C2=1,IF(D2=1,4,2),IF(D2=1,3)))
+You can see one ugly looking line of syntax including IF, =1, and there is no final output if no attributes  =1, which results in a "FALSE" row. Charts won't represent FALSE attributes nor FALSE rows, but Pivot Tables will group them all together.
+
+Minimize image
+Edit image
+Delete image
+
+
+This is nice and easy and pretty and quick to put together, but if you have experience with MS Excel, you probably realized the pivot table and chart update as soon as the data updates. That means Column E and the infographics are rerunning every time a cell is updated, which makes it processing-intensive. We don't see how bad this could get here because these example data sets are small and we only have 3 attributes to categorize into 8 Categories.
+
+That last detail reminds me of the one con of the optimized SQL process: 'The syntax is tedious to expand.' How slow would it feel if our dictionary contained 128 times as many tuples AND we were sorting by 10 attributes? In this gSheet,  you can see 10 attributes results in more than 1000 Categories to logically path through (1024 to be exact).
+
+Maximize image
+Edit image
+Delete image
+
+Comically, naming the tuples took less than 5 minutes.
+Coding the structure (in column L) took days due to human error, which was unavoidable because even AI tools can refuse to produce >1000 lines of code. I can't say I blame them. It was tedious. Enjoy testing the slower updates.
