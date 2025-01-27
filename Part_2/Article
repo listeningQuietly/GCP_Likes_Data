@@ -1,28 +1,24 @@
 Last week I showed if you are going to make pretty charts in Sheets, you should also process the data in Sheets to maintain relationships between fields. However, there are other interesting tools in GCP for processing data and making data pretty.
 
 For instance, one of the main issues with processing data in Sheets is how inefficient it is. Realistically, it is a spreadsheet issue in general and every spreadsheet program has significant processing limitations compared to database operations and if you need the capability to process vast amounts of data quickly (like a database), GCP has a tool for that: BigQuery. Everyone with a gmail also has free access to Sheets and BiqQuery, but getting to it could take some searching. The easy path is you sign in and click the (1) link to your cloud console, save as a bookmark, and then select BigQuery. I also recommend (2) creating your own new 'First Project' so you can control the name and id of objects while also preserving what Google wants to share with you as part of their introduction to BiqQuery.
-
+Cloud Console/First Project Photo
 Don't forget to bookmark the console.
-
 There are 3 options for adding data immediately available to you, but they all go to the same form, which has 4 main sections of interest.
 
 The first section is 'Source'. Your 'Select Drive URI' should be the URL of your drive's copy of the spreadsheet 'SegmentingRows_1' I shared a couple weeks back. 'Sheet range' allows an interesting level of precision in that you can specify Sheet AND cell range, so we can easily exclude from '3Attributes' the 'Category' attribute (in column E), the Pivot Table, the Bar Chart, and the entirety sheets 'Silly_CSV' and 'Original_CSV'.
-
-
+Your_Source.png
 That Sheet range gets a lot done.
 The second section is 'Destination'. Pretty straight forward with a few options that are entirely up to you. 'Project' should be what you named your 'New Project' earlier. 'Dataset' can be anything that you want it to be, but I tend towards the hyper-literal when it comes to data. Same with 'Table', but I added an underscore to underscore this data is ready for database operations.
-
-
+Your_Destination.png
 External is fine.
 The third section is 'Schema' and there are a couple things I want to highlight. Never trust 'Auto detect' and I saved Attribute 1-3 as Type:Boolean because they are qualitative data points. This seems inaccurate given they were numbers for quite a few iterations and while that is usually a quantitative data property, I have never done any math with them. They were only numbers because not all databases have a Boolean data type and those that do likely have an Int data type that takes up less storage than a Boolean and as weird as this sounds, comparing Integer values is sometimes faster than comparing Booleans. So my choice at this point is between 'Do I care more about storage costs and efficiency of processing?' or 'Do I prefer to prevent mathematical operations and more accurately represent the data point?' Integers process fast, Boolean protects the data. GCP is storing this tiny data set for free and database querying is such a massive improvement over spreadsheet nested IFs, this will still process faster with Boolean protections.
-
-
+Your_Schema.png
 So String:Yes to Integer:1 to Boolean:True.
 That is a major change and we should query to confirm accuracy that 1s are now Trues. Finally though, the fourth section is 'Advanced Options'. Skipping headers here instead of earlier in 'Sheet range' potentially allows Pivot tables to be a data source, but more importantly, it disallows GCP from making guesses regarding which columns in the data match to which columns in the Schema. I include headers and make their names identical for matching, then skip them as data points. While it is possible BigQuery assumes the names and metadata assigned here is in the same order as the datasets' columns during import, I recommend having the names match perfectly AND the attributes be in the same order.
-
-
+Your_Advanced_Options.png
 I like automation, but I don't trust computers thinking for me.
 If you refresh the BigQuery tab, you will find your new dataset and table in your 'Explorer' section. From there, you can right click the table 'Query' and a SQL workspace will pop up. Final question to answer, 'How can we confirm the 1s are Trues and 0s are False?'
 
 SELECT * FROM `for-linkedin-sharing.Linkedin_Project.3_Attributes` LIMIT 10
-Save the query as a Classic Query and compare your outputs to your gSheet. With this workspace, we can add data and practice SQL for free with some limitations, but it is worth noting this is not connecting to a relational database (more on that another day). WELCOME TO BIGQUERY STUDIO!
+
+Save the query as a Classic Query and compare your outputs to your Sheet. With this workspace, we can add data and practice SQL for free with some limitations, but it is worth noting this is not connecting to a relational database (more on that another day). WELCOME TO BIGQUERY STUDIO!
